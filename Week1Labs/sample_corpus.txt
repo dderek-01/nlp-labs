@@ -1,0 +1,4 @@
+This is a sample sentence showing 7 different token types: alphabetic, numeric, alphanumeric, Title, UPPERCASE, CamelCase and punctuation!
+Sentences like that should not exist. They're too artificial
+A REAL sentence looks different. It has flavour to it. You can smell it; it's like Pythonic code, you know?
+Have you heard of 'code smell'? Google it if you haven't.
