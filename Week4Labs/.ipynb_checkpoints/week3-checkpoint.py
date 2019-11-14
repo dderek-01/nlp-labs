@@ -6,7 +6,7 @@
 import sys
 #sys.path.append(r'T:\Departments\Informatics\LanguageEngineering') 
 sys.path.append(r'\\ad.susx.ac.uk\ITS\TeachingResources\Departments\Informatics\LanguageEngineering\resources')
-sys.path.append(r'\Users\J\Desktop\code\sussex\nlp\labs\resources')
+sys.path.append(r'/Users/juliewe/resources')
 
 import re
 import pandas as pd
@@ -105,65 +105,3 @@ class SimpleClassifier_mf(SimpleClassifier):
 #------------------------
 #Lab_3_2
 #put your NB classifier class code here!
-class NBClassifier(ClassifierI):
-    
-    def __init__(self):
-        self._labels=["P","N"]
-        pass
-    
-    def labels(self): 
-        return self._labels
-    
-    def set_known_vocabulary(self,training_data):
-        known=[]
-        for doc,label in training_data:
-            known+=list(doc.keys())
-        self.known= set(known)
-    
-    def set_priors(self,training_data):
-        priors={}
-        for (doc,label) in training_data:
-            priors[label]=priors.get(label,0)+1
-        total=sum(priors.values())
-        for key,value in priors.items():
-            priors[key]=value/total
-        self.priors=priors
-        
-    def set_cond_probs(self,training_data):
-        conds={}
-        for(doc,label) in training_data:
-            classcond=conds.get(label,{})
-            for word in doc.keys():
-                classcond[word]=classcond.get(word,0)+1
-        
-            conds[label]=classcond
-    
-        for label, classcond in conds.items():
-            for word in self.known:
-        
-                classcond[word]=classcond.get(word,0)+1
-            conds[label]=classcond
-            
-        for label,dist in conds.items():
-            total=sum(dist.values())
-            conds[label]={key:value/total for (key,value) in dist.items()}
-        
-        self.conds=conds
-    
-    def train(self,training_data):
-        self.set_known_vocabulary(training_data)
-        self.set_priors(training_data)
-        self.set_cond_probs(training_data)
-    
-    def classify(self,doc):
-        doc_probs={key:math.log(value) for (key,value) in self.priors.items()}
-        for word in doc.keys():
-            if word in self.known:
-                doc_probs={classlabel:sofar+math.log(self.conds[classlabel].get(word,0)) for (classlabel,sofar) in doc_probs.items()}
-
-        highprob=max(doc_probs.values())
-        classes=[c for c in doc_probs.keys() if doc_probs[c]==highprob]
-        return random.choice(classes)
-    
-    
-    
